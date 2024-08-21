@@ -49,6 +49,10 @@ import layoutRouter from "./src/routes/layoutRouter";
 import analyticsRouter from "./src/routes/analyticsRouter";
 import orderRouter from "./src/routes/orderRouter";
 
+app.get("/",(req,res) =>{
+  res.json({greed:"welcome to lernify"})
+})
+
 
 // app.use("/api/items", itemsRoutes);
 app.use("/api/v1", router,courseRouter,layoutRouter,analyticsRouter,orderRouter);

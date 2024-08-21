@@ -43,6 +43,9 @@ const courseRouter_1 = __importDefault(require("./src/routes/courseRouter"));
 const layoutRouter_1 = __importDefault(require("./src/routes/layoutRouter"));
 const analyticsRouter_1 = __importDefault(require("./src/routes/analyticsRouter"));
 const orderRouter_1 = __importDefault(require("./src/routes/orderRouter"));
+app.get("/", (req, res) => {
+    res.json({ greed: "welcome to lernify" });
+});
 // app.use("/api/items", itemsRoutes);
 app.use("/api/v1", userRouter_1.default, courseRouter_1.default, layoutRouter_1.default, analyticsRouter_1.default, orderRouter_1.default);
 /* 404 */

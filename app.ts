@@ -33,7 +33,7 @@ app.use(morgan("dev"));
 
 // CORS setup
 const allowedOrigins = [
-	'http://localhost:3000',
+	'https://learnify-weld-three.vercel.app',"https://learnify-c8oz9jn8r-arpits-projects-1c6b9bf9.vercel.app"
 ];
 
 app.use(cors({

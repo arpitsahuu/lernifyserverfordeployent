@@ -21,8 +21,13 @@ const errorHandler_2 = __importDefault(require("../utils/errorHandler"));
 const userController_1 = require("../controllers/userController");
 // authenticated user
 exports.isAutheticated = (0, catchAsyncError_1.catchAsyncError)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const accessToken = req.cookies.accessToken;
-    const refreshToken = req.cookies.refreshToken;
+    var _a;
+    const accessToken = req.cookies.accessToken || ((_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1]);
+    const refreshToken = req.cookies.refreshToken || req.headers['refresh-token'];
+    console.log(req);
+    console.log(req.cookies);
+    console.log(accessToken);
+    console.log(refreshToken);
     if (!accessToken) {
         return next(new errorHandler_1.default("Please login to access this resource", 400));
     }

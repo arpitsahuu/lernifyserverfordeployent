@@ -11,6 +11,7 @@ declare global {
   namespace Express {
     interface Request {
       user?: IUser; // Define the user property on the Request object
+      id?:string
     }
   }
 }
@@ -20,15 +21,16 @@ export const isAutheticated = catchAsyncError(
   async (req: Request<any>, res: Response, next: NextFunction) => {
     const accessToken = req.cookies.accessToken as string;
     const refreshToken = req.cookies.refreshToken as string;
+    console.log(req)
     console.log(req.cookies)
     console.log(accessToken)
     console.log(refreshToken)
 
-    // if (!accessToken) {
-    //   return next(
-    //     new ErrorHandler("Please login to access this resource", 400)
-    //   );
-    // }
+    if (!accessToken) {
+      return next(
+        new ErrorHandler("Please login to access this resource", 400)
+      );
+    }
 
     const decoded = jwt.decode(accessToken) as JwtPayload;
 

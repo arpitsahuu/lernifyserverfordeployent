@@ -30,7 +30,8 @@ const morgan_1 = __importDefault(require("morgan"));
 app.use((0, morgan_1.default)("dev"));
 // CORS setup
 const allowedOrigins = [
-    'https://learnify-weld-three.vercel.app', "https://learnify-c8oz9jn8r-arpits-projects-1c6b9bf9.vercel.app"
+    'https://learnify-weld-three.vercel.app', "https://learnify-c8oz9jn8r-arpits-projects-1c6b9bf9.vercel.app",
+    "http://localhost:3000"
 ];
 app.use((0, cors_1.default)({
     origin: allowedOrigins,

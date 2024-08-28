@@ -28,6 +28,7 @@ export const isAutheticated = catchAsyncError(
   async (req: Request<any>, res: Response, next: NextFunction) => {
     const accessToken = req.cookies.accessToken as string ;
     const refreshToken = req.cookies.refreshToken as string;
+    console.log(req.cookies, "cookies");
     console.log(accessToken,"aToken");
     console.log(refreshToken,"rToken");
     console.log(JWT_SECRET)
@@ -41,7 +42,7 @@ export const isAutheticated = catchAsyncError(
     const decoded = jwt.verify(accessToken, JWT_SECRET) as JwtPayload;
 
     console.log(decoded, "decodedtoken");
-    
+
     if (!decoded) {
       return next(new ErrorHandler("access token is not valid", 400));
     }

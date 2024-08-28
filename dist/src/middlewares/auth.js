@@ -27,6 +27,7 @@ if (!JWT_SECRET) {
 exports.isAutheticated = (0, catchAsyncError_1.catchAsyncError)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
+    console.log(req.cookies, "cookies");
     console.log(accessToken, "aToken");
     console.log(refreshToken, "rToken");
     console.log(JWT_SECRET);

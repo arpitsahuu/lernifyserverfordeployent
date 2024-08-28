@@ -25,10 +25,9 @@ export const isAuthenticated = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     const accessToken = req.cookies.accessToken as string;
     const refreshToken = req.cookies.refreshToken as string;
-    console.log(req);
-    console.log(req.cookies);
-    console.log(accessToken);
-    console.log(refreshToken);
+    console.log(req.cookies , "cookies");
+    console.log(accessToken, "Atoken");
+    console.log(refreshToken, "rtoken");
 
     if (!accessToken) {
       return next(new ErrorHandler("Please login to access this resource", 400));

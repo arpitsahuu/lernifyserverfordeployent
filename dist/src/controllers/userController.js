@@ -99,7 +99,7 @@ exports.userActivation = (0, catchAsyncError_1.catchAsyncError)((req, res, next)
         httpOnly: true,
         secure: true,
         maxAge: 30 * 24 * 60 * 60 * 1000,
-        sameSite: 'None',
+        sameSite: 'Lax',
     };
     res
         .status(201)
@@ -146,13 +146,23 @@ exports.userLogin = (0, catchAsyncError_1.catchAsyncError)((req, res, next) => _
     };
     res
         .status(200)
-        .cookie("accessToken", tokens === null || tokens === void 0 ? void 0 : tokens.accessToken, options)
-        .cookie("refreshToken", tokens === null || tokens === void 0 ? void 0 : tokens.refreshToken, options)
+        .cookie("accessToken", tokens === null || tokens === void 0 ? void 0 : tokens.accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: "none"
+    })
+        .cookie("refreshToken", tokens === null || tokens === void 0 ? void 0 : tokens.refreshToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: "none"
+    })
         .json({
         succcess: true,
         message: "successfully login",
         user: user,
-        accesToken: tokens === null || tokens === void 0 ? void 0 : tokens.accessToken,
+        accessToken: tokens === null || tokens === void 0 ? void 0 : tokens.accessToken,
         refreshToken: tokens === null || tokens === void 0 ? void 0 : tokens.accessToken,
     });
 }));

@@ -140,7 +140,7 @@ export const userActivation = catchAsyncError(
       httpOnly: true,
       secure: true,
       maxAge: 30 * 24 * 60 * 60 * 1000,
-      sameSite: 'None',
+      sameSite: 'Lax',
     };
 
     res
@@ -149,7 +149,7 @@ export const userActivation = catchAsyncError(
         httpOnly: true,
         secure: true,
         maxAge:  24 * 60 * 60 * 1000,
-        sameSite: "none"
+        sameSite:"none"
       })
       .cookie("refreshToken", tokens?.refreshToken, {
         httpOnly: true,
@@ -209,13 +209,23 @@ export const userLogin = catchAsyncError(
 
     res
       .status(200)
-      .cookie("accessToken", tokens?.accessToken, options)
-      .cookie("refreshToken", tokens?.refreshToken, options)
+      .cookie("accessToken", tokens?.accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge:  24 * 60 * 60 * 1000,
+        sameSite:"none"
+      })
+      .cookie("refreshToken", tokens?.refreshToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge:  24 * 60 * 60 * 1000,
+        sameSite:"none"
+      })
       .json({
         succcess: true,
         message: "successfully login",
         user: user,
-        accesToken: tokens?.accessToken,
+        accessToken: tokens?.accessToken,
         refreshToken: tokens?.accessToken,
       });
   }

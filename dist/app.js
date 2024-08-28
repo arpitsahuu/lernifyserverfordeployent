@@ -36,7 +36,16 @@ const allowedOrigins = [
 app.use((0, cors_1.default)({
     origin: allowedOrigins,
     credentials: true,
-    optionsSuccessStatus: 200, // Address potential preflight request issues
+    // optionsSuccessStatus: 200 ,// Address potential preflight request issues
+    allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'X-Requested-With',
+        'Accept',
+        'Origin',
+        'X-Auth-Token'
+    ], // Specify the allowed headers for the CORS request
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 }));
 /* router */
 const userRouter_1 = __importDefault(require("./src/routes/userRouter"));

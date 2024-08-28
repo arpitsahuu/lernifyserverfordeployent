@@ -16,22 +16,14 @@ declare global {
   }
 }
 
-const JWT_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
-
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined in environment variables");
-}
-
-
 // authenticated user
 export const isAutheticated = catchAsyncError(
   async (req: Request<any>, res: Response, next: NextFunction) => {
     const accessToken = req.cookies.accessToken as string ;
     const refreshToken = req.cookies.refreshToken as string;
-    console.log(req.cookies, "cookies");
-    console.log(accessToken,"aToken");
-    console.log(refreshToken,"rToken");
-    console.log(JWT_SECRET)
+    console.log(req.cookies)
+    console.log(accessToken)
+    console.log(refreshToken)
 
     if (!accessToken) {
       return next(
@@ -39,15 +31,13 @@ export const isAutheticated = catchAsyncError(
       );
     }
 
-    const decoded = jwt.verify(accessToken, JWT_SECRET) as JwtPayload;
-
-    console.log(decoded, "decodedtoken");
+    const decoded = jwt.decode(accessToken) as JwtPayload;
 
     if (!decoded) {
       return next(new ErrorHandler("access token is not valid", 400));
     }
 
-    // check if the access token is expir
+    // check if the access token is expired
     if (decoded.exp && decoded.exp <= Date.now() / 1000 ) {
       try {
         await updateAccessToken(req, res, next);

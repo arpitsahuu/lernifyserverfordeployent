@@ -19,27 +19,21 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const redis_1 = require("../models/redis");
 const errorHandler_2 = __importDefault(require("../utils/errorHandler"));
 const userController_1 = require("../controllers/userController");
-const JWT_SECRET = process.env.ACCESS_TOKEN_SECRET;
-if (!JWT_SECRET) {
-    throw new Error("JWT_SECRET is not defined in environment variables");
-}
 // authenticated user
 exports.isAutheticated = (0, catchAsyncError_1.catchAsyncError)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
-    console.log(req.cookies, "cookies");
-    console.log(accessToken, "aToken");
-    console.log(refreshToken, "rToken");
-    console.log(JWT_SECRET);
+    console.log(req.cookies);
+    console.log(accessToken);
+    console.log(refreshToken);
     if (!accessToken) {
         return next(new errorHandler_1.default("Please login to access this resource", 400));
     }
-    const decoded = jsonwebtoken_1.default.verify(accessToken, JWT_SECRET);
-    console.log(decoded, "decodedtoken");
+    const decoded = jsonwebtoken_1.default.decode(accessToken);
     if (!decoded) {
         return next(new errorHandler_1.default("access token is not valid", 400));
     }
-    // check if the access token is expir
+    // check if the access token is expired
     if (decoded.exp && decoded.exp <= Date.now() / 1000) {
         try {
             yield (0, userController_1.updateAccessToken)(req, res, next);

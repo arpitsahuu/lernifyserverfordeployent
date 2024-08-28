@@ -3,7 +3,6 @@ import { catchAsyncError } from "./catchAsyncError";
 import ErrorHandler from "../utils/errorHandler";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { redis } from "../models/redis";
-import errorHandler from "../utils/errorHandler";
 import { IUser } from "../models/userModel";
 import { updateAccessToken } from "../controllers/userController";
 
@@ -11,55 +10,59 @@ declare global {
   namespace Express {
     interface Request {
       user?: IUser; // Define the user property on the Request object
-      id?:string
+      id?: string;
     }
   }
 }
 
+const JWT_SECRET = process.env.ACCESS_TOKEN_SECRET as string; // Make sure to use a secure secret in production
+
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET is not defined in environment variables");
+}
 // authenticated user
-export const isAutheticated = catchAsyncError(
-  async (req: Request<any>, res: Response, next: NextFunction) => {
-    const accessToken = req.cookies.accessToken as string || req.headers['authorization']?.split(' ')[1] as string;
-    const refreshToken = req.cookies.refreshToken as string || req.headers['refresh-token'] as string;
-    console.log(req)
-    console.log(req.cookies)
-    console.log(accessToken)
-    console.log(refreshToken)
+export const isAuthenticated = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const accessToken = req.cookies.accessToken as string;
+    const refreshToken = req.cookies.refreshToken as string;
+    console.log(req);
+    console.log(req.cookies);
+    console.log(accessToken);
+    console.log(refreshToken);
 
     if (!accessToken) {
-      return next(
-        new ErrorHandler("Please login to access this resource", 400)
-      );
+      return next(new ErrorHandler("Please login to access this resource", 400));
     }
 
-    const decoded = jwt.decode(accessToken) as JwtPayload;
+    try {
+      const decoded = jwt.verify(accessToken, JWT_SECRET) as JwtPayload;
 
-    if (!decoded) {
-      return next(new ErrorHandler("access token is not valid", 400));
-    }
+      // Check if token is expired by verifying the expiration time
+      if (decoded.exp && decoded.exp <= Date.now() / 1000) {
+        try {
+          await updateAccessToken(req, res, next);
+        } catch (error) {
+          return next(error);
+        }
+      } else {
+        const user = await redis.get(decoded._id);
 
-    // check if the access token is expired
-    if (decoded.exp && decoded.exp <= Date.now() / 1000 ) {
-      try {
-        await updateAccessToken(req, res, next);
-      } catch (error) {
-        return next(error);
+        if (!user) {
+          return next(
+            new ErrorHandler("Please login to access this resource", 400)
+          );
+        }
+
+        const curruser = JSON.parse(user);
+
+        if (curruser) {
+          req.user = curruser;
+        }
+
+        next();
       }
-    } else {
-      const user = await redis.get(decoded._id);
-      if (!user) {
-        return next(
-          new ErrorHandler("Please login to access this resource", 400)
-        );
-      }
-      const curruser = await JSON.parse(user)
-
-      
-      if(curruser && user){
-        req.user = curruser
-      }
-
-      next();
+    } catch (error) {
+      return next(new ErrorHandler("Invalid or expired access token", 401));
     }
   }
 );
@@ -69,7 +72,7 @@ export const authorizeRoles = (...roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!roles.includes(req.user?.role || "")) {
       return next(
-        new errorHandler(
+        new ErrorHandler(
           `Role: ${req.user?.role} is not allowed to access this resource`,
           403
         )

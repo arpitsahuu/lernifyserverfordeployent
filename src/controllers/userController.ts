@@ -140,12 +140,23 @@ export const userActivation = catchAsyncError(
       httpOnly: true,
       secure: true,
       maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: 'None',
     };
 
     res
       .status(201)
-      .cookie("accessToken", tokens?.accessToken, options)
-      .cookie("refreshToken", tokens?.refreshToken, options)
+      .cookie("accessToken", tokens?.accessToken,{
+        httpOnly: true,
+        secure: true,
+        maxAge:  24 * 60 * 60 * 1000,
+        sameSite: "none"
+      })
+      .cookie("refreshToken", tokens?.refreshToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge:  21 * 24 * 60 * 60 * 1000,
+        sameSite: "none"
+      })
       .json({
         succcess: true,
         message: "successfully register",

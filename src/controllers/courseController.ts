@@ -101,6 +101,13 @@ export const uploadCourse = catchAsyncError(
 
       // Save the course to the database
       const savedCourse = await newCourse.save();
+
+      const courses = await Course.find().select(
+        "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
+      );
+
+      await redis.set("courses", JSON.stringify(courses));
+      
       res.status(201).json({
         success: true,
         course: savedCourse,
@@ -225,14 +232,28 @@ export const getSingleCourse = catchAsyncError(
 export const getAllCourses = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const courses = await Course.find().select(
-        "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
-      );
 
-      res.status(200).json({
-        success: true,
-        courses,
-      });
+      const coursesString = await redis.get("courses")
+      if(coursesString){
+        const courses = await JSON.parse(coursesString);
+        res.status(200).json({
+          success: true,
+          courses,
+        });
+      } else {
+        const courses = await Course.find().select(
+          "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
+        );
+
+        await redis.set("courses", JSON.stringify(courses));
+  
+        res.status(200).json({
+          success: true,
+          courses,
+        });
+
+      }
+
     } catch (error: any) {
       return next(new errorHandler(error.message, 500));
     }

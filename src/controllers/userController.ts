@@ -249,7 +249,7 @@ export const userLongOut = catchAsyncError(
       httpOnly: true,
       secure: true,
     };
-    res.clearCookie("accesToken", options)
+    res.clearCookie("accessToken", options)
       .clearCookie("refreshToken", options)
       .json({
         succcess: true,

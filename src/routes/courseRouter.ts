@@ -1,5 +1,5 @@
 import express from 'express';
-import { deltetCours, generateVideoUrl, getAdminAllCourses, getAllCourses, getCourseByUser, getSingleCourse, searchCourses, uploadCourse } from '../controllers/courseController';
+import { deltetCours, editCourse, generateVideoUrl, getAdminAllCourses, getAllCourses, getCourseByUser, getSingleCourse, searchCourses, uploadCourse } from '../controllers/courseController';
 import {  isAutheticated } from '../middlewares/auth';
 import {upload} from "../middlewares/multer"
 
@@ -18,7 +18,7 @@ courseRouter.post(
 
 courseRouter.post("/course", uploadCourse)
 
-courseRouter.put("/course/:id", uploadCourse)
+courseRouter.put("/course/:id", editCourse)
 
 courseRouter.get("/get-course/:id", getSingleCourse);
 

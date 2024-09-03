@@ -87,6 +87,8 @@ exports.uploadCourse = (0, catchAsyncError_1.catchAsyncError)((req, res, next) =
         });
         // Save the course to the database
         const savedCourse = yield newCourse.save();
+        const courses = yield courseModel_1.default.find().select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links");
+        yield redis_1.redis.set("courses", JSON.stringify(courses));
         res.status(201).json({
             success: true,
             course: savedCourse,
@@ -186,11 +188,22 @@ exports.getSingleCourse = (0, catchAsyncError_1.catchAsyncError)((req, res, next
 //Get All Courses
 exports.getAllCourses = (0, catchAsyncError_1.catchAsyncError)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const courses = yield courseModel_1.default.find().select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links");
-        res.status(200).json({
-            success: true,
-            courses,
-        });
+        const coursesString = yield redis_1.redis.get("courses");
+        if (coursesString) {
+            const courses = yield JSON.parse(coursesString);
+            res.status(200).json({
+                success: true,
+                courses,
+            });
+        }
+        else {
+            const courses = yield courseModel_1.default.find().select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links");
+            yield redis_1.redis.set("courses", JSON.stringify(courses));
+            res.status(200).json({
+                success: true,
+                courses,
+            });
+        }
     }
     catch (error) {
         return next(new errorHandler_1.default(error.message, 500));

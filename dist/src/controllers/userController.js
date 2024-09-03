@@ -183,7 +183,7 @@ exports.userLongOut = (0, catchAsyncError_1.catchAsyncError)((req, res, next) =>
         httpOnly: true,
         secure: true,
     };
-    res.clearCookie("accesToken", options)
+    res.clearCookie("accessToken", options)
         .clearCookie("refreshToken", options)
         .json({
         succcess: true,

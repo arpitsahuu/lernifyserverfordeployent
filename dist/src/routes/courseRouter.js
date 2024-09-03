@@ -11,7 +11,7 @@ const courseRouter = express_1.default.Router();
 courseRouter.post("/getVdoCipherOTP", courseController_1.generateVideoUrl);
 courseRouter.post("/create-course", auth_1.isAutheticated, courseController_1.uploadCourse);
 courseRouter.post("/course", courseController_1.uploadCourse);
-courseRouter.put("/course/:id", courseController_1.uploadCourse);
+courseRouter.put("/course/:id", courseController_1.editCourse);
 courseRouter.get("/get-course/:id", courseController_1.getSingleCourse);
 courseRouter.get("/get-courses", courseController_1.getAllCourses);
 courseRouter.get("/get/admin/courses", 

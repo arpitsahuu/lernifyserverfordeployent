@@ -1,6 +1,6 @@
 import express from 'express';
 import { deltetCours, editCourse, generateVideoUrl, getAdminAllCourses, getAllCourses, getCourseByUser, getSingleCourse, searchCourses, uploadCourse } from '../controllers/courseController';
-import {  isAutheticated } from '../middlewares/auth';
+import {  authorizeRoles, isAutheticated } from '../middlewares/auth';
 import {upload} from "../middlewares/multer"
 
 
@@ -26,15 +26,15 @@ courseRouter.get("/get-courses", getAllCourses);
 
 courseRouter.get(
     "/get/admin/courses",
-    // isAutheticated,
-    // authorizeRoles("admin"),
+    isAutheticated,
+    authorizeRoles("admin"),
     getAdminAllCourses
 );
 
 courseRouter.delete(
     "/course/:id",
-    // isAutheticated,
-    // authorizeRoles("admin"),
+    isAutheticated,
+    authorizeRoles("admin"),
     deltetCours
 );
 

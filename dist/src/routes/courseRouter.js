@@ -14,14 +14,8 @@ courseRouter.post("/course", courseController_1.uploadCourse);
 courseRouter.put("/course/:id", courseController_1.editCourse);
 courseRouter.get("/get-course/:id", courseController_1.getSingleCourse);
 courseRouter.get("/get-courses", courseController_1.getAllCourses);
-courseRouter.get("/get/admin/courses", 
-// isAutheticated,
-// authorizeRoles("admin"),
-courseController_1.getAdminAllCourses);
-courseRouter.delete("/course/:id", 
-// isAutheticated,
-// authorizeRoles("admin"),
-courseController_1.deltetCours);
+courseRouter.get("/get/admin/courses", auth_1.isAutheticated, (0, auth_1.authorizeRoles)("admin"), courseController_1.getAdminAllCourses);
+courseRouter.delete("/course/:id", auth_1.isAutheticated, (0, auth_1.authorizeRoles)("admin"), courseController_1.deltetCours);
 courseRouter.get("/get-course-content/:id", auth_1.isAutheticated, courseController_1.getCourseByUser);
 courseRouter.get("/search/courses", courseController_1.searchCourses);
 exports.default = courseRouter;

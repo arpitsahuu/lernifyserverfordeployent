@@ -190,6 +190,7 @@ exports.getAllCourses = (0, catchAsyncError_1.catchAsyncError)((req, res, next) 
     try {
         const coursesString = yield redis_1.redis.get("courses");
         if (coursesString) {
+            console.log("reids");
             const courses = yield JSON.parse(coursesString);
             res.status(200).json({
                 success: true,

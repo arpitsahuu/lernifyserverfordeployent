@@ -233,8 +233,9 @@ export const getAllCourses = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
 
-      const coursesString = await redis.get("courses")
+      const coursesString = await redis.get("courses");
       if(coursesString){
+        console.log("reids")
         const courses = await JSON.parse(coursesString);
         res.status(200).json({
           success: true,

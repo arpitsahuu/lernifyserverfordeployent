@@ -265,7 +265,7 @@ exports.updateAccessToken = (0, catchAsyncError_1.catchAsyncError)((req, res, ne
 // TO GET USERS INFORMATION.
 exports.getUserInfo = (0, catchAsyncError_1.catchAsyncError)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log(req.user);
+        // console.log(req)
         const user = req.user;
         if (!user) {
             next(new errorHandler_1.default("user not lonin", 401));

@@ -180,6 +180,8 @@ export const userLogin = catchAsyncError(
     if (!email || !password)
       return next(new errorHandler("Pleas fill all details"));
 
+
+
     // const user: IUser | null = await User.findOne({ email: email }).populate("cou").select("+password -courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links")
     const user = await User.findOne({ email: email }).select("+password").populate("courses").exec();
     
@@ -380,7 +382,7 @@ export const updateAccessToken = catchAsyncError(
 export const getUserInfo = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      console.log(req.user)
+      // console.log(req)
       const user = req.user;
       if(!user){
         next(new errorHandler("user not lonin",401))

@@ -27,22 +27,22 @@ const mongoose_1 = __importStar(require("mongoose"));
 const courseSchema = new mongoose_1.Schema({
     name: {
         type: String,
-        required: [true, 'Name is Required']
+        required: [true, "Name is Required"],
     },
     description: {
         type: String,
-        required: [true, "Course Description is Required"]
+        required: [true, "Course Description is Required"],
     },
     price: {
         type: Number,
-        required: [true, "Price is Required"]
+        required: [true, "Price is Required"],
     },
     categories: {
-        type: String
+        type: String,
     },
     estimatedPrice: {
         type: Number,
-        required: [true, "Estimated Price is Required"]
+        required: [true, "Estimated Price is Required"],
     },
     thumbnail: {
         public_id: {
@@ -52,39 +52,41 @@ const courseSchema = new mongoose_1.Schema({
         url: {
             type: String,
             // required: true
-        }
+        },
     },
-    courseData: [{
+    courseData: [
+        {
             type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'courseData'
-        }],
+            ref: "courseData",
+        },
+    ],
     tags: {
         type: String,
-        required: true
+        required: true,
     },
     level: {
         type: String,
         enum: ["Beginner", "Intermediate", "Advanced"],
-        required: [true, "Course Level is Required"]
+        required: [true, "Course Level is Required"],
     },
     demoUrl: {
         type: String,
-        required: true
+        required: true,
     },
     benefits: [{ title: String }],
     prerequisites: [{ title: String }],
-    reviews: [],
+    reviews: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Review" }],
     rating: {
         type: Number,
-        default: 0
+        default: 0,
     },
     purchased: {
         type: Number,
-        default: 0
+        default: 0,
     },
     totalVideos: {
         type: Number,
-        required: [true, "Number of videos required"]
+        required: [true, "Number of videos required"],
     },
 });
 const Course = mongoose_1.default.model("Course", courseSchema);

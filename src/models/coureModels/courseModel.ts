@@ -3,7 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface ICourse extends Document {
   name: string;
   description: string;
-  categories:string;
+  categories: string;
   price: number;
   estimatedPrice: number;
   thumbnail: {
@@ -18,29 +18,29 @@ export interface ICourse extends Document {
   reviews: any[]; // Define the type for reviews
   rating: number;
   purchased: number;
-  totalVideos:number;
-  courseData:any[];
+  totalVideos: number;
+  courseData: any[];
 }
 
 const courseSchema: Schema<ICourse> = new Schema({
   name: {
     type: String,
-    required: [true, 'Name is Required']
+    required: [true, "Name is Required"],
   },
   description: {
     type: String,
-    required: [true, "Course Description is Required"]
+    required: [true, "Course Description is Required"],
   },
   price: {
     type: Number,
-    required: [true, "Price is Required"]
+    required: [true, "Price is Required"],
   },
-  categories:{
-    type:String
+  categories: {
+    type: String,
   },
   estimatedPrice: {
     type: Number,
-    required: [true, "Estimated Price is Required"]
+    required: [true, "Estimated Price is Required"],
   },
   thumbnail: {
     public_id: {
@@ -50,39 +50,41 @@ const courseSchema: Schema<ICourse> = new Schema({
     url: {
       type: String,
       // required: true
-    }
+    },
   },
-  courseData:[ {
-    type: Schema.Types.ObjectId,
-    ref: 'courseData'
-  }],
+  courseData: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "courseData",
+    },
+  ],
   tags: {
     type: String,
-    required: true
+    required: true,
   },
   level: {
     type: String,
     enum: ["Beginner", "Intermediate", "Advanced"],
-    required: [true, "Course Level is Required"]
+    required: [true, "Course Level is Required"],
   },
   demoUrl: {
     type: String,
-    required: true
+    required: true,
   },
   benefits: [{ title: String }],
   prerequisites: [{ title: String }],
-  reviews: [],
+  reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
   rating: {
     type: Number,
-    default: 0
+    default: 0,
   },
   purchased: {
     type: Number,
-    default: 0
+    default: 0,
   },
   totalVideos: {
     type: Number,
-    required: [true, "Number of videos required"]
+    required: [true, "Number of videos required"],
   },
 });
 

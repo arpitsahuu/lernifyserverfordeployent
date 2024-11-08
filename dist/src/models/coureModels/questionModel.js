@@ -27,17 +27,22 @@ const mongoose_1 = __importStar(require("mongoose"));
 const querySchema = new mongoose_1.Schema({
     user: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
         required: true
     },
-    query: {
+    question: {
         type: String,
         required: true
     },
     reply: String,
-    courseData: {
+    courseId: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "Course",
+        required: true
+    },
+    contentId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "courseData",
         required: true
     }
 });
